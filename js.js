@@ -2,6 +2,7 @@ const input = document.querySelector('input');
 const span = document.querySelector('span');
 const button = document.querySelector('button');
 const tbody = document.querySelector('tbody');
+const iframe = document.querySelector('iframe');
 
 async function getWords() {
   const wordsResp = await fetch('./words.json');
@@ -21,7 +22,7 @@ async function displaySeveralWords(n) {
     const randomNumber = Math.floor(Math.random() * words.length);
     const randomWord = words[randomNumber];
 
-    const tableRaw = document.createElement('tr')
+    const tableRaw = document.createElement('tr');
     tableRaw.innerHTML = `<td>${randomWord.word}</td><td>${randomWord.translation}</td>`;
 
     tbody.appendChild(tableRaw);
@@ -29,9 +30,16 @@ async function displaySeveralWords(n) {
 
 }
 
+function showExamples(event) {
+  const word = event.target.parentElement.firstElementChild.textContent;
+  iframe.src = 'https://dopeoplesay.com/q/' + word;
+  iframe.scrollIntoView();
+}
+
 async function main() {
   input.addEventListener('input', () => { span.innerHTML = input.value });
   button.addEventListener('click', () => displaySeveralWords(input.value));
+  tbody.addEventListener('click', e => showExamples(e))
 }
 
 main();
